@@ -1,0 +1,15 @@
+{
+  "main": "src/main.js",
+  "scripts": {
+    "start": " electron . "
+  },
+  "dependencies": {
+    "simple-tmi-emotes": "^1.1.1",
+    "tmi.js": "^1.8.5",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "electron": "^21.2.3",
+    "nodemon": "^2.0.20"
+  }
+}
