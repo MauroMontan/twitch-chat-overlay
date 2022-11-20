@@ -24,7 +24,7 @@ let tray;
 app.whenReady().then(() => {
   createWindow();
 
-  const icon = nativeImage.createFromPath('assets/asset.png');
+  const icon = nativeImage.createFromPath('assets/icon.png');
   tray = new Tray(icon);
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Item1', type: 'radio' },

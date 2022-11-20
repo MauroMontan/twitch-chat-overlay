@@ -11,8 +11,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const scrollToEnd = (chatBox) => {
     let scrollHeight = chatBox.scrollHeight;
     chatBox.scrollTop = scrollHeight;
-
-    console.log(scrollHeight);
   };
 
   const loadMessage = (selector, username, message, emotes) => {
@@ -25,8 +23,8 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     if (chatBox) {
-      let fullMessage = `${username}: ${parse(message, emotes, options)}`;
-      console.log(typeof fullMessage);
+      // TODO: CHANGE USERNAME TO VAR USERNAME
+      let fullMessage = parse(message, emotes, options);
 
       let li = document.createElement('li');
 
@@ -42,8 +40,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   client.on('message', (channel, tags, message, self) => {
     // "Alca: Hello, World!"
-
     loadMessage('chat-box', tags['display-name'], message, tags.emotes);
-    setInterval(() => {}, 1000);
   });
 });
