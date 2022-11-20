@@ -1,10 +1,20 @@
 const path = require('path');
+const fs = require('fs');
 const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
-const createWindow = () => {
+const settingsLoader = () => {
+  const settings = fs.readFileSync(
+    path.join(__dirname, 'settings.json'),
+    'utf8'
+  );
+  return JSON.parse(settings);
+};
+
+const createWindow = async () => {
+  const settings = await settingsLoader();
   const win = new BrowserWindow({
-    width: 300,
-    height: 500,
+    width: settings.width,
+    height: settings.height,
     frame: false,
     transparent: true,
     webPreferences: {
