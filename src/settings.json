@@ -1,8 +1,7 @@
 {
-  "channel": "elded",
+  "channel": "nissaxter",
   "width": 200,
   "height": 300,
   "fontSize": "2.2vw",
-  "timeOut": 1200,
-  "opacity": 1
+  "timeOut": 1200
 }

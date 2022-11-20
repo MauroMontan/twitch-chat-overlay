@@ -2,6 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
+
+let appIcon = nativeImage.createEmpty();
+
 const settingsLoader = () => {
   const settings = fs.readFileSync(
     path.join(__dirname, 'settings.json'),
@@ -13,8 +16,13 @@ const settingsLoader = () => {
 const createWindow = async () => {
   const settings = await settingsLoader();
   const win = new BrowserWindow({
+    icon: appIcon,
     width: settings.width,
     height: settings.height,
+    acceptFirstMouse: false,
+    focusable: false,
+    roundedCorners: true,
+    movable: true,
     frame: false,
     transparent: true,
     webPreferences: {
@@ -23,29 +31,46 @@ const createWindow = async () => {
     },
   });
 
+
+
   win.setAlwaysOnTop(true, 'screen');
   win.menuBarVisible = false;
   win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
-};
 
-let tray;
+  const icon = nativeImage.createFromPath(path.join(__dirname, "assets/icon.png"));
 
-app.whenReady().then(() => {
-  createWindow();
+  let tray;
 
-  const icon = nativeImage.createFromPath('assets/icon.png');
   tray = new Tray(icon);
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Item1', type: 'radio' },
-    { label: 'Item2', type: 'radio' },
-    { label: 'Item3', type: 'radio', checked: true },
-    { label: 'Item4', type: 'radio' },
+    { label: 'close', click: () => { win.destroy() } },
   ]);
 
   tray.setContextMenu(contextMenu);
 
-  app.on('activate', () => {
+
+  tray.setToolTip('This is my application.');
+
+
+  tray.on('click', function (e) {
+    if (win.isVisible()) {
+      win.hide()
+    } else {
+      win.show()
+    }
+  });
+
+
+};
+
+app.disableHardwareAcceleration();
+
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on('activate', (event) => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
