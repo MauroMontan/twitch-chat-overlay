@@ -17,20 +17,26 @@ In the `build-win32-x64\resources\app\src\settings.json` file you can change som
 }
 
 ```
-
 IMPORTANT: you need to change your channel name to see your own channel messages, if you do not know css DONT TOUCH font size
 
-## Running the overlay
+### Running the overlay
 
 Once you have set your channel name in settings, run the "build" executable on the folder root (you can rename it)
 
-## features 
+### features 
 
+- follows current workspaces
 - no authentication needed
 - simple and fast 
 - no app taskbar icon
 
-## What is left ?
+
+### Screensots
+
+![example](screenshots/chat-overlay-example.png)
+
+
+### What is left ?
 
 - im working on subs messages
 - subscriptions might not be possible to show
