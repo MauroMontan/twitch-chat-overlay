@@ -31,13 +31,13 @@ const createWindow = async () => {
     },
   });
 
-
-
-  win.setAlwaysOnTop(true, 'screen');
+  
   win.menuBarVisible = false;
   win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
-
+  win.setIgnoreMouseEvents(true);
+  win.setAlwaysOnTop(true, 'screen');
+  win.setFullScreenable(false);
   const icon = nativeImage.createFromPath(path.join(__dirname, "assets/icon.png"));
 
   let tray;
