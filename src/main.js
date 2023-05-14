@@ -5,7 +5,7 @@ const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
 
 
-let canMoveWindow = false;
+let ignoreMouseEvents = true;
 
 let appIcon = nativeImage.createEmpty();
 
@@ -39,7 +39,7 @@ const createWindow = async () => {
   win.menuBarVisible = false;
   win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
-  win.setIgnoreMouseEvents(true);
+  win.setIgnoreMouseEvents(ignoreMouseEvents);
   win.setAlwaysOnTop(true, 'screen');
   win.setFullScreenable(false);
   const icon = nativeImage.createFromPath(path.join(__dirname, "assets/icon.png"));
@@ -49,7 +49,7 @@ const createWindow = async () => {
   tray = new Tray(icon);
   const contextMenu = Menu.buildFromTemplate([
     { label: 'close', click: () => { win.destroy() } },
-    { label: 'toggle movement: ' + canMoveWindow ? "yes" : "no", click: () => { canMoveWindow = !canMoveWindow } },
+    { label: 'toggle movement: ', click: () => { ignoreMouseEvents = !ignoreMouseEvents } },
   ]);
 
   tray.setContextMenu(contextMenu);
