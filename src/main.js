@@ -3,6 +3,10 @@ const fs = require('fs');
 const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
 
+
+
+let canMoveWindow = false;
+
 let appIcon = nativeImage.createEmpty();
 
 const settingsLoader = () => {
@@ -31,7 +35,7 @@ const createWindow = async () => {
     },
   });
 
-  
+
   win.menuBarVisible = false;
   win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
@@ -45,6 +49,7 @@ const createWindow = async () => {
   tray = new Tray(icon);
   const contextMenu = Menu.buildFromTemplate([
     { label: 'close', click: () => { win.destroy() } },
+    { label: 'toggle movement: ' + canMoveWindow ? "yes" : "no", click: () => { canMoveWindow = !canMoveWindow } },
   ]);
 
   tray.setContextMenu(contextMenu);
@@ -53,7 +58,7 @@ const createWindow = async () => {
   tray.setToolTip('This is my application.');
 
 
-  tray.on('click', function (e) {
+  tray.on('click', function(e) {
     if (win.isVisible()) {
       win.hide()
     } else {
