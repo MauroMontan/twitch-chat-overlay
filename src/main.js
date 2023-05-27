@@ -4,6 +4,10 @@ const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
 
 
 
+let borderDragIndicator = false;
+exports.borderDragIndicator = borderDragIndicator;
+
+
 let appIcon = nativeImage.createEmpty();
 
 const settingsLoader = () => {
@@ -13,6 +17,31 @@ const settingsLoader = () => {
   );
   return JSON.parse(settings);
 };
+
+
+
+const writeSettings = async (windowSize, windowPos) => {
+
+  const filePath = path.join(__dirname, './settings.json');
+
+  let winSize = windowSize;
+
+  const settings = await settingsLoader();
+
+  let data = JSON.stringify({
+    ...settings,
+    width: winSize[0],
+    height: winSize[1],
+    lastPosition: windowPos
+  });
+
+  fs.writeFileSync(filePath, data, (_) => {
+    return -1;
+  });
+
+
+}
+
 
 const createWindow = async () => {
   const settings = await settingsLoader();
@@ -32,72 +61,78 @@ const createWindow = async () => {
     },
   });
 
-  
+
+  console.log(win.getSize());
+
+  let defaultwindowPos = { x: 0, y: 0 };
+
+  let setWindowPos = async () => {
+
+    var settings = await settingsLoader();
+
+    defaultwindowPos = {
+      x: settings.lastPosition[0],
+      y: settings.lastPosition[1]
+    }
+  }
 
 
-let windowAnchors =  {
-  topRight:{x:1150,y:5},
-  topleft: {x:5,y:5},
-  bottomLeft:{x:6,y:438},
-  bottomRight:{x:1150,y:487}
-}
+  await setWindowPos();
 
 
-  win.menuBarVisible =false;
-  win.setPosition(windowAnchors.topRight.x,windowAnchors.topRight.y)
+  win.frame
+  win.menuBarVisible = false;
+  win.setPosition(defaultwindowPos.x, defaultwindowPos.y)
   win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
   win.setAlwaysOnTop(true, 'screen');
-  win.setFullScreenable(false);
+  win.setFullScreenable(true);
+
+
   const icon = nativeImage.createFromPath(path.join(__dirname, "assets/icon.png"));
+
+  let trayIcon = icon.resize({ width: 16 })
+
+  trayIcon.setTemplateImage(true);
 
   let tray;
 
-  
 
-  tray = new Tray(icon);
+
+  tray = new Tray(trayIcon);
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'toggle movement',type:"checkbox",checked:true, click: (e) => {
-          if (e.checked){
-            win.setIgnoreMouseEvents(true)
-          }
-          else {
-            win.setIgnoreMouseEvents(false)
-          }
-    } },
-    
-    {label:"bottom left",type:"radio",click:()=>{
-      win.setPosition(x=windowAnchors.bottomLeft.x,
-        y=windowAnchors.bottomLeft.y)
-    }},
-    {label:"bottom right",type:"radio",click:()=>{
-      win.setPosition(x=windowAnchors.bottomRight.x,
-        y=windowAnchors.bottomRight.y)
-    }},
-    {label:"top left",type:"radio",click:()=>{
-      win.setPosition(x=windowAnchors.topleft.x,
-        y=windowAnchors.topleft.y)
-    }},
-    {label:"top right",type:"radio",click:()=>{
-      win.setPosition(x=windowAnchors.topRight.x,
-        y=windowAnchors.topRight.y)
-    }},
-    { label: 'close', click: () => { win.destroy() } },
+    {
+      label: 'toggle movement', type: "checkbox", checked: false, click: (e) => {
+        if (e.checked) {
+
+          borderDragIndicator = true;
+          win.setIgnoreMouseEvents(true)
+        }
+        else {
+
+          borderDragIndicator = false;
+          win.setIgnoreMouseEvents(false)
+        }
+      }
+    },
+
+
+    {
+      label: 'close', click: () => {
+        writeSettings(win.getSize(), win.getPosition());
+        win.destroy()
+      }
+    },
   ]);
-
-
- 
-
-
 
 
   tray.setContextMenu(contextMenu);
 
- 
+
   tray.setToolTip('rogers chat settings');
 
 
-  tray.on('click', function(e) {
+  tray.on('click', function(_) {
     if (win.isVisible()) {
       win.hide()
     } else {
@@ -108,13 +143,15 @@ let windowAnchors =  {
 
 };
 
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
+
+
 
 
 app.whenReady().then(() => {
   createWindow();
 
-  app.on('activate', (event) => {
+  app.on('activate', (_) => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });

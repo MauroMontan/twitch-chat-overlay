@@ -9,6 +9,7 @@ const settingsLoader = async () => {
 window.addEventListener('DOMContentLoaded', async () => {
   const settings = await settingsLoader();
 
+
   const client = new tmi.Client({
     channels: [settings.channel],
   });
@@ -22,7 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const loadMessage = (selector, username, color, message, emotes) => {
     const chatBox = document.getElementById(selector);
 
-    chatBox.style.fontSize = settings.fontSize;
+    //chatBox.style.fontSize = "20px";
 
     const options = {
       format: 'default',

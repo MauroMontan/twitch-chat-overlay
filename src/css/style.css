@@ -5,13 +5,14 @@
   padding: 0;
   margin: 0;
   color: white;
-  font-family: "Poppins", sans-serif;
+font-family: 'Roboto', sans-serif;
+  font-size:20px;
   font-weight: bold;
   user-select: none;
 }
 
 .username {
-  color: red;
+  color: teal;
 }
 
 html {
@@ -26,12 +27,11 @@ body {
 }
 
 .root {
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: saturate(50%) blur(8px);
+  background-color: rgba(0, 0, 0, 1.0);
   overflow: hidden;
   width: 100%;
   height: 100vh;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
 }
 
 .root ul {
@@ -53,7 +53,6 @@ img {
 
 .root ul li {
   list-style: none;
-  background-color: #1c1c1c30;
   border-radius: 0.2rem;
   padding: 0.3rem;
   word-wrap: break-word;
@@ -66,6 +65,6 @@ img {
 
 @media (max-width: 400px) {
   * {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
