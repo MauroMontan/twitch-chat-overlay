@@ -43,6 +43,9 @@ const createWindow = async () => {
     acceptFirstMouse: false,
     focusable: false,
     roundedCorners: true,
+    alwaysOnTop: true,
+    fullscreenable: false,
+    fullscreen: false,
     movable: true,
     frame: false,
     transparent: true,
@@ -51,8 +54,6 @@ const createWindow = async () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
-  console.log(win.getSize());
 
   let defaultwindowPos = { x: 0, y: 0 };
 
@@ -67,12 +68,11 @@ const createWindow = async () => {
 
   await setWindowPos();
 
-  win.frame;
   win.menuBarVisible = false;
+  win.setVisibleOnAllWorkspaces(true);
   win.setPosition(defaultwindowPos.x, defaultwindowPos.y);
-  win.setVisibleOnAllWorkspaces('true');
   win.loadFile('src/index.html');
-  win.setAlwaysOnTop(true, 'screen');
+  win.setAlwaysOnTop(true, 'floating');
   win.setFullScreenable(true);
 
   const icon = nativeImage.createFromPath(
