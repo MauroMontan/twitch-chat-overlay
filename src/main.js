@@ -1,51 +1,31 @@
 const path = require('path');
 const fs = require('fs');
-const { app, BrowserWindow, Menu, Tray, nativeImage } = require('electron');
+const { app, BrowserWindow, Tray, nativeImage } = require('electron');
+const { Utils } = require("./utils/utils")
+const { trayMenuTemplate } = require("./tray_context_menu")
 
-let borderDragIndicator = false;
-exports.borderDragIndicator = borderDragIndicator;
+
+
+const utils = new Utils();
+
 
 let appIcon = nativeImage.createEmpty();
 
-const settingsLoader = () => {
-  const settings = fs.readFileSync(
-    path.join(__dirname, 'settings.json'),
-    'utf8'
-  );
-  return JSON.parse(settings);
-};
 
-const writeSettings = async (windowSize, windowPos) => {
-  const filePath = path.join(__dirname, './settings.json');
-
-  let winSize = windowSize;
-
-  const settings = await settingsLoader();
-
-  let data = JSON.stringify({
-    ...settings,
-    width: winSize[0],
-    height: winSize[1],
-    lastPosition: windowPos,
-  });
-
-  fs.writeFileSync(filePath, data, (_) => {
-    return -1;
-  });
-};
 
 const createWindow = async () => {
-  const settings = await settingsLoader();
+  const settings = utils.settingsLoader();
   const win = new BrowserWindow({
     icon: appIcon,
     width: settings.width,
+    show: true,
     height: settings.height,
     acceptFirstMouse: false,
     focusable: false,
     roundedCorners: true,
     alwaysOnTop: true,
     fullscreenable: false,
-    fullscreen: false,
+    fullscreen: true,
     movable: true,
     frame: false,
     transparent: true,
@@ -55,25 +35,14 @@ const createWindow = async () => {
     },
   });
 
-  let defaultwindowPos = { x: 0, y: 0 };
-
-  let setWindowPos = async () => {
-    var settings = await settingsLoader();
-
-    defaultwindowPos = {
-      x: settings.lastPosition[0],
-      y: settings.lastPosition[1],
-    };
-  };
-
-  await setWindowPos();
 
   win.menuBarVisible = false;
   win.setVisibleOnAllWorkspaces(true);
-  win.setPosition(defaultwindowPos.x, defaultwindowPos.y);
+  win.setPosition(utils.lastWindowPosition().x, utils.lastWindowPosition().y);
   win.loadFile('src/index.html');
   win.setAlwaysOnTop(true, 'floating');
   win.setFullScreenable(true);
+
 
   const icon = nativeImage.createFromPath(
     path.join(__dirname, 'assets/icon.png')
@@ -86,30 +55,8 @@ const createWindow = async () => {
   let tray;
 
   tray = new Tray(trayIcon);
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'toggle movement',
-      type: 'checkbox',
-      checked: false,
-      click: (e) => {
-        if (e.checked) {
-          borderDragIndicator = true;
-          win.setIgnoreMouseEvents(true);
-        } else {
-          borderDragIndicator = false;
-          win.setIgnoreMouseEvents(false);
-        }
-      },
-    },
 
-    {
-      label: 'close',
-      click: () => {
-        writeSettings(win.getSize(), win.getPosition());
-        win.destroy();
-      },
-    },
-  ]);
+  const contextMenu = trayMenuTemplate(win, utils);
 
   tray.setContextMenu(contextMenu);
 
@@ -122,11 +69,14 @@ const createWindow = async () => {
       win.show();
     }
   });
+
 };
 
-//app.disableHardwareAcceleration();
+
+app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
+
   createWindow();
 
   app.on('activate', (_) => {

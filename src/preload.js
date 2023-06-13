@@ -1,13 +1,12 @@
 const tmi = require('tmi.js');
 const { parse } = require('simple-tmi-emotes');
+const { Utils } = require("./utils/utils")
 
-const settingsLoader = async () => {
-  let settings = await fetch('settings.json');
-  return await settings.json();
-};
+
+const utils = new Utils();
 
 window.addEventListener('DOMContentLoaded', async () => {
-  const settings = await settingsLoader();
+  const settings = utils.settingsLoader();
 
 
   const client = new tmi.Client({
@@ -45,7 +44,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         chatBox.append(li);
 
         scrollToEnd(chatBox);
-      }, 1300);
+      }, 0);
       // TODO: CHANGE USERNAME TO VAR USERNAME
     }
   };
