@@ -1,6 +1,6 @@
 {
   "main": "src/main.js",
-  "author":"MauroMontan" ,
+  "author": "MauroMontan",
   "version": "1.0",
   "scripts": {
     "start": "electron .",
@@ -12,7 +12,7 @@
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
-    "electron": "^21.2.3",
+    "electron": "^25.1.0",
     "nodemon": "^2.0.20"
   }
 }

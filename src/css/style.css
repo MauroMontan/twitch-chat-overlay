@@ -11,9 +11,6 @@
   user-select: none;
 }
 
-.username {
-  color: red;
-}
 
 html {
   -webkit-app-region: drag;
@@ -28,11 +25,10 @@ body {
 
 .root {
   background-color: var(--main-bg-color);
-  backdrop-filter: saturate(50%) blur(8px);
   overflow: hidden;
   width: 100%;
   height: 100vh;
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
 }
 
 .root ul {
@@ -54,7 +50,7 @@ img {
 
 .root ul li {
   list-style: none;
-  background-color: #1c1c1c30;
+  background-color: var(--message-background);
   border-radius: 0.2rem;
   padding: 0.3rem;
   word-wrap: break-word;

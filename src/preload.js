@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const scrollToEnd = (chatBox) => {
     let scrollHeight = chatBox.scrollHeight;
     chatBox.scrollTop = scrollHeight;
+
   };
 
   const loadMessage = (selector, username, color, message, emotes) => {
@@ -31,21 +32,19 @@ window.addEventListener('DOMContentLoaded', async () => {
     };
 
     if (chatBox) {
-      setTimeout(() => {
-        let fullMessage = parse(message, emotes, options);
 
-        let li = document.createElement('li');
+      let fullMessage = parse(message, emotes, options);
 
-        li.innerHTML =
-          `<a style="color:${color};">${username}</a><b>:</b> ` +
-          '  ' +
-          fullMessage;
+      let li = document.createElement('li');
 
-        chatBox.append(li);
+      li.innerHTML =
+        `<a style="color:${color};">${username} </a> <b>: </b> ` +
+        '  ' +
+        fullMessage;
 
-        scrollToEnd(chatBox);
-      }, 0);
-      // TODO: CHANGE USERNAME TO VAR USERNAME
+      chatBox.append(li);
+
+      scrollToEnd(chatBox);
     }
   };
 
@@ -53,7 +52,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   //
 
   client.on('message', (channel, tags, message, self) => {
-    console.log(channel);
+
     loadMessage(
       'chat-box',
       tags['display-name'],

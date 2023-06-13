@@ -1,1 +1,11 @@
-{"channel":"nissaxter","width":325,"height":451,"fontSize":"30px","timeOut":1200,"lastPosition":[1356,106]}
+{
+    "channel": "rubius",
+    "width": 325,
+    "height": 451,
+    "fontSize": "30px",
+    "timeOut": 1200,
+    "lastPosition": [
+        1343,
+        85
+    ]
+}

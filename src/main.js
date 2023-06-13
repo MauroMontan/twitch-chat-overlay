@@ -18,6 +18,7 @@ const createWindow = async () => {
   const win = new BrowserWindow({
     icon: appIcon,
     width: settings.width,
+    hasShadow: false,
     show: true,
     height: settings.height,
     acceptFirstMouse: false,
@@ -73,7 +74,7 @@ const createWindow = async () => {
 };
 
 
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
 
