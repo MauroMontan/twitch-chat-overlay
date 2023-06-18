@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { SettingsDto } = require('../dto/settings');
 
 class Utils {
 
@@ -16,7 +17,7 @@ class Utils {
       path.join(__dirname, "..", 'settings.json'),
       'utf8'
     );
-    return JSON.parse(settings);
+    return new SettingsDto(JSON.parse(settings));
   };
 
 

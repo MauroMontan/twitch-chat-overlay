@@ -2,19 +2,17 @@ const path = require('path');
 const fs = require('fs');
 const { app, BrowserWindow, Tray, nativeImage } = require('electron');
 const { Utils } = require("./utils/utils")
-const { trayMenuTemplate } = require("./tray_context_menu")
-
+const { trayMenuTemplate } = require("./tray_context_menu");
 
 
 const utils = new Utils();
 
-
 let appIcon = nativeImage.createEmpty();
 
-
+const settings = utils.settingsLoader();
 
 const createWindow = async () => {
-  const settings = utils.settingsLoader();
+
   const win = new BrowserWindow({
     icon: appIcon,
     width: settings.width,
@@ -74,7 +72,9 @@ const createWindow = async () => {
 };
 
 
-//app.disableHardwareAcceleration();
+if (settings.hardwareAccelerationDisabled) {
+  app.disableHardwareAcceleration();
+}
 
 app.whenReady().then(() => {
 
